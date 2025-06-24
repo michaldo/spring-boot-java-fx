@@ -6,10 +6,6 @@ jobs:
   build:
     name: HelloWorld on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    env:
-      MAVEN_OPTS: >-
-        --batch-mode
-        --no-transfer-progress
     strategy:
       matrix:
         os: [windows-latest]
@@ -27,10 +23,10 @@ jobs:
           native-image-job-reports: 'true'
 
       - name: Process aot
-        run: mvn compile spring-boot:process-aot
+        run: mvn  --batch-mode --no-transfer-progress compile spring-boot:process-aot
 
       - name: Build native app
-        run: mvn gluonfx:build
+        run: mvn --batch-mode --no-transfer-progress gluonfx:build
 
       - name: Upload binary
         uses: actions/upload-artifact@v4
