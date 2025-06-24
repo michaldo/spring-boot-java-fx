@@ -6,11 +6,18 @@ jobs:
   build:
     name: HelloWorld on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    env:
+      MAVEN_OPTS: >-
+        --batch-mode
+        --no-transfer-progress
     strategy:
       matrix:
         os: [windows-latest]
     steps:
       - uses: actions/checkout@v4
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.2
 
       - uses: graalvm/setup-graalvm@v1
         with:
