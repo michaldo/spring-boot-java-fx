@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.michaldo</groupId>
+    <artifactId>spring-boot-java-fx</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.3</version>
+        <relativePath/>
+    </parent>
+
+    <properties>
+        <java.version>21</java.version>
+        <javafx.version>21.0.7</javafx.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Gluon Client Plugin (native image builder) -->
+            <plugin>
+                <groupId>com.gluonhq</groupId>
+                <artifactId>gluonfx-maven-plugin</artifactId>
+                <version>1.0.26</version>
+                <configuration>
+                    <mainClass>io.github.michaldo.HelloApplication</mainClass>
+                    <attachList>
+                        <attach>executable</attach> <!-- Avoid packaging MSI -->
+                    </attachList>
+                    <reflectionList>
+                        <item>io.github.michaldo.HelloController</item>
+                    </reflectionList>
+                    <resourcesList>
+                        <resource>src/main/resources/io/github/michaldo/hello-view.fxml</resource>
+                    </resourcesList>
+                    <runtimeArgs>
+                        <arg>--add-modules=javafx.controls,javafx.fxml</arg>
+                    </runtimeArgs>
+                    <linkerArgs>
+                        <arg>management_ext.lib</arg>
+                        <arg>psapi.lib</arg>
+                    </linkerArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,32 @@
+name: release-native.yml
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: HelloWorld on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '21'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          native-image-job-reports: 'true'
+
+      - name: Process aot
+        run: mvn compile spring-boot:process-aot
+
+      - name: Build native app
+        run: mvn gluonfx:build
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: helloworld-${{ matrix.os }}
+          path: target/gluonfx/x86_64-windows/*.exe
