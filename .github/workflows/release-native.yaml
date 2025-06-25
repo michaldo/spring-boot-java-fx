@@ -22,9 +22,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           native-image-job-reports: 'true'
           cache: 'maven'
-      - name: Check cl.exe
-        run: where cl
-        shell: cmd
         
       - name: Process aot
         run: mvn  --batch-mode --no-transfer-progress compile spring-boot:process-aot
