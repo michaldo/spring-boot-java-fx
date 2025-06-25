@@ -12,9 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v2
-
       - uses: graalvm/setup-graalvm@v1
         with:
           java-version: '21'
@@ -24,16 +21,18 @@ jobs:
           cache: 'maven'
         
       - name: Process aot
-        run: mvn  --batch-mode --no-transfer-progress compile spring-boot:process-aot
+        run: mvn --batch-mode --no-transfer-progress compile spring-boot:process-aot
 
       - name: Build native app
-        run: |
-            call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-            mvn --batch-mode --no-transfer-progress gluonfx:build
+        run: mvn --batch-mode --no-transfer-progress gluonfx:build
         shell: cmd
 
-      - name: Upload binary
-        uses: actions/upload-artifact@v4
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
         with:
-          name: helloworld-${{ matrix.os }}
-          path: target/gluonfx/x86_64-windows/*.exe
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          release_name: native-image
+          file: target/gluonfx/x86_64-windows/spring-boot-java-fx.exe
+          overwrite: true
+          make_latest: true
