@@ -30,7 +30,9 @@ jobs:
         run: mvn  --batch-mode --no-transfer-progress compile spring-boot:process-aot
 
       - name: Build native app
-        run: mvn --batch-mode --no-transfer-progress gluonfx:build
+        run: |
+            call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+            mvn --batch-mode --no-transfer-progress gluonfx:build
 
       - name: Upload binary
         uses: actions/upload-artifact@v4
