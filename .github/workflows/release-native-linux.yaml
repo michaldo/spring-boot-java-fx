@@ -1,5 +1,5 @@
 
-name: release-native-linux
+name: release-native-linux.yml
 on:
   workflow_dispatch:
 
