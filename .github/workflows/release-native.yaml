@@ -44,11 +44,14 @@ jobs:
           ls -l target/gluonfx/x86_64-windows/
           test -f target/gluonfx/x86_64-windows/spring-boot-java-fx.exe
 
+      - name: Upload
+        run: gh release upload latesto target/gluonfx/x86_64-windows/spring-boot-java-fx.exe
 
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          tag: poletto
-          file: target/gluonfx/x86_64-windows/spring-boot-java-fx.exe
-          overwrite: true
-          make_latest: true
+
+      # - name: Upload binaries to release
+      #   uses: svenstaro/upload-release-action@v2
+      #   with:
+      #     tag: poletto
+      #     file: target/gluonfx/x86_64-windows/spring-boot-java-fx.exe
+      #     overwrite: true
+      #     make_latest: true
