@@ -46,6 +46,8 @@ jobs:
 
       - name: Upload
         run: gh release upload latesto target/gluonfx/x86_64-windows/spring-boot-java-fx.exe
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
 
 
       # - name: Upload binaries to release
