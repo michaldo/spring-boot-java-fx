@@ -39,6 +39,11 @@ jobs:
       - name: Create a file
         run: touch target/gluonfx/x86_64-windows/spring-boot-java-fx.exe
 
+      - name: Verify .exe file exists
+        run: |
+          ls -l target/gluonfx/x86_64-windows/
+          test -f target/gluonfx/x86_64-windows/spring-boot-java-fx.exe
+
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
