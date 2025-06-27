@@ -37,7 +37,7 @@ jobs:
         run: mkdir -p target/gluonfx/x86_64-windows
 
       - name: Create a file
-        run: touch target/gluonfx/x86_64-windows/spring-boot-java-fx.exe
+        run: date >  target/gluonfx/x86_64-windows/spring-boot-java-fx.exe
 
       - name: Verify .exe file exists
         run: |
@@ -46,10 +46,11 @@ jobs:
 
       - name: Upload
         run: |
-          git tag -f latesto
-          git push origin -f latesto
-          gh release edit latesto --notes "Updated build"
-          gh release upload latesto target/gluonfx/x86_64-windows/spring-boot-java-fx.exe --clobber
+          gh release delete my-release --yes
+          git tag -f my-release-tag
+          git push origin -f my-release-tag
+          gh release create my-release
+          gh release upload my-release target/gluonfx/x86_64-windows/spring-boot-java-fx.exe --clobber
         env:
           GITHUB_TOKEN: ${{ github.TOKEN }}
 
