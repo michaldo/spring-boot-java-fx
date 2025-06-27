@@ -1,0 +1,45 @@
+name: release-native-linux.yml
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: HelloWorld on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write # for release
+    env:
+      MAVEN_ARGS: --batch-mode --no-transfer-progress
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install libraries
+        run: |
+          sudo apt update
+          sudo apt install libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libgl-dev libgtk-3-dev libpango1.0-dev libxtst-dev
+
+
+      - uses: graalvm/setup-graalvm@v1
+       with:
+         java-version: '21'
+         distribution: 'graalvm'
+         github-token: ${{ secrets.GITHUB_TOKEN }}
+         native-image-job-reports: 'true'
+         cache: 'maven'
+        
+      - name: Process aot
+        run: mvn  compile spring-boot:process-aot
+
+      - name: Upload
+        run: |
+          gh release delete my-release --yes
+          git tag -f my-release-tag
+          git push origin -f my-release-tag
+          gh release create my-release
+          gh release upload my-release target/gluonfx/x86_64-linux/spring-boot-java-fx --clobber
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
+
