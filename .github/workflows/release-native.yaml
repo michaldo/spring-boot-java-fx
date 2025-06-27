@@ -45,7 +45,11 @@ jobs:
           test -f target/gluonfx/x86_64-windows/spring-boot-java-fx.exe
 
       - name: Upload
-        run: gh release upload latesto target/gluonfx/x86_64-windows/spring-boot-java-fx.exe
+        run: |
+          git tag -f latesto
+          git push origin -f latesto
+          gh release edit latesto --notes "Updated build"
+          gh release upload latesto target/gluonfx/x86_64-windows/spring-boot-java-fx.exe --clobber
         env:
           GITHUB_TOKEN: ${{ github.TOKEN }}
 
